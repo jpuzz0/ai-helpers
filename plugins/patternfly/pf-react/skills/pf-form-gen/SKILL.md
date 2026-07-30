@@ -18,7 +18,9 @@ The user provides one of:
 
 ## Context Detection
 
-Determine the form complexity:
+First, confirm the project uses PatternFly. If the user explicitly requests a non-PatternFly framework (Material UI, Chakra, Ant Design, plain HTML) or the project has no `@patternfly/react-core` dependency, decline generation and explain this skill is PatternFly-specific.
+
+Then determine the form complexity:
 - **Simple form**: Few fields, no conditional logic, single submit action
 - **Complex form**: Conditional fields, multi-section layout, field groups, async validation
 - **Wizard form**: Multi-step form — defer to PatternFly Wizard component instead of generating a monolithic form
