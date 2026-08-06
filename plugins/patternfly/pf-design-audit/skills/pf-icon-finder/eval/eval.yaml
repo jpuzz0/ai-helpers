@@ -93,7 +93,7 @@ judges:
       pf_icons = re.findall(r'\b[A-Z][a-zA-Z]+Icon\b', text)
       if len(pf_icons) < 2:
           return False, f"Found only {len(pf_icons)} PF icon names — expected multiple icon identifications"
-      return True, f"Identified {len(pf_icons)} PF icon components: {', '.join(set(pf_icons)[:5])}"
+      return True, f"Identified {len(pf_icons)} PF icon components: {', '.join(list(set(pf_icons))[:5])}"
 
   - name: component_managed_detection
     description: Identifies icons that are managed by PF components (no explicit import needed)
