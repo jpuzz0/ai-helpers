@@ -49,7 +49,6 @@ jobs:
       - name: Run AI Guardian scan
         id: guardian
         if: always()
-        continue-on-error: true
         run: |
           uvx ai-guardian scan plugins/ \
             --diff \
@@ -82,7 +81,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Scans for credential exfiltration, prompt injection," >> $GITHUB_STEP_SUMMARY
           echo "code security issues, and unsafe patterns in bundled scripts." >> $GITHUB_STEP_SUMMARY
-          echo "This scan is **advisory only** and does not block merge." >> $GITHUB_STEP_SUMMARY
+          echo "This scan **blocks merge** when findings are detected." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ -f /tmp/ai-guardian.json ] && [ -s /tmp/ai-guardian.json ]; then

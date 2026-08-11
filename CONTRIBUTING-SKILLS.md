@@ -349,7 +349,7 @@ make security
 
 This uses `uvx` (zero-install) to run AI Guardian against the plugins directory. You need [uv](https://docs.astral.sh/uv/getting-started/installation/) installed.
 
-AI Guardian findings are **advisory, not blocking** — your PR won't be held up. But credential exfiltration and code security findings in bundled scripts should be addressed before merge.
+AI Guardian findings are **blocking** — address them before merge.
 
 *A cross-team collaboration with [Red Hat Product Security](https://github.com/RedHatProductSecurity).*
 
