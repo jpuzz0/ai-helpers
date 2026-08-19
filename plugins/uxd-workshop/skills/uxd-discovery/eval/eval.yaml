@@ -44,7 +44,7 @@ dataset:
 
 outputs:
   - tool: AskUserQuestion
-    schema: Clarifying questions about the problem, user groups, or research scope.
+    schema: Clarifying questions about the problem, user groups, or strategic decisions.
 
 traces:
   stdout: true
@@ -62,7 +62,7 @@ judges:
       text = outputs.get("conversation", "")
       has_problem = re.search(r"Problem Statement", text, re.IGNORECASE)
       has_users = re.search(r"User Groups", text, re.IGNORECASE)
-      has_questions = re.search(r"Research Questions", text, re.IGNORECASE)
+      has_decisions = re.search(r"Strategic Decisions", text, re.IGNORECASE)
       has_landscape = re.search(r"Competitive Landscape", text, re.IGNORECASE)
       has_constraints = re.search(r"Constraints", text, re.IGNORECASE)
       missing = []
@@ -70,8 +70,8 @@ judges:
           missing.append("Problem Statement")
       if not has_users:
           missing.append("User Groups")
-      if not has_questions:
-          missing.append("Research Questions")
+      if not has_decisions:
+          missing.append("Strategic Decisions")
       if not has_landscape:
           missing.append("Competitive Landscape")
       if not has_constraints:
@@ -89,10 +89,10 @@ judges:
       text = outputs.get("conversation", "")
       has_problem = re.search(r"Problem Statement", text, re.IGNORECASE)
       has_users = re.search(r"User Groups", text, re.IGNORECASE)
-      has_questions = re.search(r"Research Questions", text, re.IGNORECASE)
+      has_decisions = re.search(r"Strategic Decisions", text, re.IGNORECASE)
       has_landscape = re.search(r"Competitive Landscape", text, re.IGNORECASE)
       has_constraints = re.search(r"Constraints|Assumptions", text, re.IGNORECASE)
-      if not (has_problem and has_users and has_questions and has_landscape and has_constraints):
+      if not (has_problem and has_users and has_decisions and has_landscape and has_constraints):
           return False, "Brief is missing one or more required sections"
       has_markdown_structure = (
           re.search(r"^#{1,3}\s", text, re.MULTILINE)

@@ -3,13 +3,13 @@ name: uxd-discovery
 version: 0.1.0
 description: >-
   Produce a structured UX discovery brief from a feature request, Jira issue,
-  or problem statement. Use when starting a research cycle, framing a design
-  problem, or scoping user research.
+  or problem statement. Use when framing a design problem, identifying
+  strategic decisions, or scoping design work.
 ---
 
 # UX Discovery Brief
 
-Produces a structured discovery brief that frames a design problem, identifies user groups, generates research questions, surveys the competitive landscape, and surfaces constraints. The brief is structured markdown, usable as input to research planning or design sprints.
+Produces a structured discovery brief that frames a design problem, identifies user groups, surfaces the strategic decisions that need to be made, surveys the competitive landscape, and captures constraints. The brief is structured markdown, usable as input to research scoping or design sprints.
 
 ---
 
@@ -25,7 +25,7 @@ Produces a structured discovery brief that frames a design problem, identifies u
 
 | Output | Format | Description |
 |---|---|---|
-| Discovery brief | Structured markdown | Problem statement, user groups, research questions, competitive landscape, constraints |
+| Discovery brief | Structured markdown | Problem statement, user groups, strategic decisions, competitive landscape, constraints |
 
 ## Arguments
 
@@ -82,19 +82,20 @@ If the source material does not clearly indicate user groups, propose candidates
 
 ---
 
-## Step 2: Generate Research Questions
+## Step 2: Frame Strategic Decisions
 
-Based on the problem statement and user groups, generate 5-8 research questions that would inform design decisions. Questions should be:
+Based on the problem statement and user groups, identify 3-6 design decisions that need to be made to move this work forward. For each decision, capture:
 
-- **Specific** -- tied to observable behavior or measurable outcomes, not vague
-- **Actionable** -- answerable through user research methods (interviews, surveys, analytics, usability testing)
-- **Prioritized** -- ordered by impact on design decisions
+- **Decision question** -- frame as "We need to decide whether to..." or "We need to determine how to...", not "What do users think about..."
+- **Business outcome** -- what business or product outcome does this decision serve?
+- **Actionable outcome** -- what concrete action will the team take once this decision is made?
+- **Decision timeline** -- by when does the team need this information to stay on track?
 
-Group questions by theme (e.g., "Current workflow", "Decision factors", "Adoption barriers").
+Group decisions by theme (e.g., "Interaction model", "Information architecture", "Adoption strategy").
 
-Present the questions and ask:
+Present the decisions and ask:
 
-> Do these research questions cover the right areas? Should I adjust the focus or add questions about a specific aspect?
+> Do these decisions capture what the team needs to resolve? Should I adjust the framing or add decisions about a specific aspect?
 
 ---
 
@@ -156,17 +157,21 @@ Assemble the brief using the template below. Present it to the user for review.
 
 [Repeat for each group]
 
-## Research Questions
+## Strategic Decisions
 
 ### [Theme 1]
-1. [Question]
-2. [Question]
+
+**Decision:** [We need to decide whether to / determine how to...]
+**Business outcome:** [What product/business outcome this serves]
+**Actionable outcome:** [What the team will do once decided]
+**Timeline:** [By when this decision is needed]
 
 ### [Theme 2]
-3. [Question]
-4. [Question]
 
-[Additional themes as needed]
+**Decision:** [We need to decide whether to / determine how to...]
+**Business outcome:** [What product/business outcome this serves]
+**Actionable outcome:** [What the team will do once decided]
+**Timeline:** [By when this decision is needed]
 
 ## Competitive Landscape
 
@@ -190,8 +195,8 @@ Assemble the brief using the template below. Present it to the user for review.
 
 ## Guardrails
 
-- **Do not fabricate data.** If the source material is insufficient, ask for more context rather than inventing user groups, research questions, or competitive products.
-- **Do not prescribe solutions.** The brief frames the problem and research -- it does not recommend designs or implementations.
-- **Do not skip confirmation.** The user must confirm understanding (Step 0), user groups (Step 1), and research questions (Step 2) before proceeding.
+- **Do not fabricate data.** If the source material is insufficient, ask for more context rather than inventing user groups, decisions, or competitive products.
+- **Do not prescribe solutions.** The brief frames the problem and decisions -- it does not recommend designs or implementations.
+- **Do not skip confirmation.** The user must confirm understanding (Step 0), user groups (Step 1), and strategic decisions (Step 2) before proceeding.
 - **Assumptions are hypotheses, not facts.** Frame every assumption as something to validate, not a known truth.
 - **AI transparency.** Note that the competitive landscape is based on the assistant's general knowledge and may need verification.
