@@ -8,5 +8,10 @@
     "name": "kialam/patternfly-mcp",
     "url": "https://github.com/kialam/patternfly-mcp/pull/1",
     "description": "feat: Python/uv MCP server implementation"
+  },
+  {
+    "name": "real-limitless/ProjectEverflow",
+    "url": "https://github.com/real-limitless/ProjectEverflow/pull/11",
+    "description": "feat: org chart tree, room channel/team CRUD, and real sandboxes"
   }
 ]
