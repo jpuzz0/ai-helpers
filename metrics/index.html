@@ -429,10 +429,17 @@
         container.appendChild(vDiv);
       }
 
+      const findLatest = (key) => {
+        for (let i = snapshots.length - 1; i >= 0; i--) if (snapshots[i][key] != null) return { value: snapshots[i][key], idx: i };
+        return null;
+      };
+      const visitors = findLatest('github_unique_visitors_14d');
+      const views = findLatest('github_views_14d');
+      const prevFor = (key, idx) => { for (let i = idx - 1; i >= 0; i--) if (snapshots[i][key] != null) return snapshots[i][key]; return undefined; };
       [
-        { label: 'Unique Visitors', value: latest.github_unique_visitors_14d, prev: prev?.github_unique_visitors_14d, hint: '14-day window', showDelta },
-        { label: 'Page Views', value: latest.github_views_14d, prev: prev?.github_views_14d, hint: '14-day window', showDelta },
-      ].filter(m => m.value != null).forEach(m => stat(container, m));
+        visitors && { label: 'Unique Visitors', value: visitors.value, prev: prevFor('github_unique_visitors_14d', visitors.idx), hint: '14-day window', showDelta },
+        views && { label: 'Page Views', value: views.value, prev: prevFor('github_views_14d', views.idx), hint: '14-day window', showDelta },
+      ].filter(Boolean).forEach(m => stat(container, m));
     }
 
     (async () => {
