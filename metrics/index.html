@@ -218,8 +218,8 @@
       const consumerSkills = latest.skills - workshopSkills;
       const prevConsumer = prev ? prev.skills - workshopSkills : null;
       [
-        { label: 'Consumer Skills', value: consumerSkills, prev: prevConsumer, showDelta, subtitle: 'Production-ready, eval-gated', link: `${REPO_BASE}/search?q=path%3A**/SKILL.md` },
-        { label: 'Workshop Skills', value: workshopSkills, showDelta: false, subtitle: 'Internal tools & skill incubation', link: `${REPO_BASE}/search?q=path%3A**/SKILL.md` },
+        { label: 'Consumer Skills', value: consumerSkills, prev: prevConsumer, showDelta, subtitle: 'Production-ready, eval-gated', link: `${REPO_BASE}/search?q=path%3A**/SKILL.md+NOT+path%3A*workshop*` },
+        { label: 'Workshop Skills', value: workshopSkills, showDelta: false, subtitle: 'Internal tools & skill incubation', link: `${REPO_BASE}/search?q=path%3A*workshop*/SKILL.md` },
         { label: 'Agents', value: latest.agents, prev: prev?.agents, showDelta, link: `${REPO_BASE}/search?q=path%3A**/agents/*.md` },
         { label: 'Plugins', value: latest.plugins, prev: prev?.plugins, showDelta, link: `${REPO_BASE}/blob/main/PLUGINS.md` },
         { label: 'Unique Visitors', value: latest.unique_visitors_14d, prev: prev?.unique_visitors_14d, hint: '14-day window', showDelta },
