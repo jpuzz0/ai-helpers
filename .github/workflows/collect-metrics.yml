@@ -166,8 +166,10 @@ jobs:
           MCP_VIEWS_JSON=$(gh api "repos/${MCP_REPO}/traffic/views" 2>/dev/null || echo '{}')
           MCP_VISITORS=$(echo "$MCP_VIEWS_JSON" | jq '.uniques // null' 2>/dev/null || echo null)
           MCP_VISITORS=$(echo "${MCP_VISITORS:-null}" | tr -d '[:space:]')
+          [[ "$MCP_VISITORS" =~ ^(null|[0-9]+)$ ]] || MCP_VISITORS=null
           MCP_VIEWS=$(echo "$MCP_VIEWS_JSON" | jq '.count // null' 2>/dev/null || echo null)
           MCP_VIEWS=$(echo "${MCP_VIEWS:-null}" | tr -d '[:space:]')
+          [[ "$MCP_VIEWS" =~ ^(null|[0-9]+)$ ]] || MCP_VIEWS=null
 
           NEW_MCP_SNAP=$(jq -n \
             --arg date "$DATE" \
@@ -176,20 +178,22 @@ jobs:
             --arg last_publish "${NPM_LAST_PUBLISH}" \
             --argjson visitors "${MCP_VISITORS}" \
             --argjson views "${MCP_VIEWS}" \
-            '{date: $date, npm_weekly_downloads: $downloads, npm_latest_version: $version, npm_last_publish: $last_publish} | if $visitors then .github_unique_visitors_14d = $visitors else . end | if $views then .github_views_14d = $views else . end')
+            '{date: $date, npm_weekly_downloads: $downloads, npm_latest_version: $version, npm_last_publish: $last_publish} | if $visitors then .github_unique_visitors_14d = $visitors else . end | if $views then .github_views_14d = $views else . end' 2>/dev/null || true)
 
           MCP_FILE="metrics/mcp-metrics.json"
-          if [ -f "$MCP_FILE" ]; then
+          if [ -n "$NEW_MCP_SNAP" ] && [ -f "$MCP_FILE" ]; then
             jq --argjson snap "$NEW_MCP_SNAP" '
               .snapshots = [.snapshots[] | select(.date != $snap.date)] + [$snap] | .snapshots |= sort_by(.date)
             ' "$MCP_FILE" > /tmp/mcp-metrics.json && mv /tmp/mcp-metrics.json "$MCP_FILE"
-          else
+          elif [ -n "$NEW_MCP_SNAP" ]; then
             jq -n --argjson snap "$NEW_MCP_SNAP" '{
               package: "@patternfly/patternfly-mcp",
               repo: "patternfly/patternfly-mcp",
               collected_by: "github-actions",
               snapshots: [$snap]
             }' > "$MCP_FILE"
+          else
+            echo "WARNING: MCP snapshot build failed, skipping MCP metrics update"
           fi
 
           sed -i "/^${DATE},/d" metrics/adoption-metrics.csv
