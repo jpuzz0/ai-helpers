@@ -153,27 +153,29 @@ jobs:
           MCP_REPO="patternfly/patternfly-mcp"
           MCP_NPM_PKG="@patternfly/patternfly-mcp"
 
-          NPM_REGISTRY=$(curl -sf "https://registry.npmjs.org/${MCP_NPM_PKG}" || echo '{}')
-          NPM_DOWNLOADS=$(curl -sf "https://api.npmjs.org/downloads/point/last-week/${MCP_NPM_PKG}" | jq '.downloads // 0' || echo 0)
-          NPM_DOWNLOADS=${NPM_DOWNLOADS:-0}
-          NPM_VERSION=$(echo "$NPM_REGISTRY" | jq -r '.["dist-tags"].latest // "unknown"')
+          MCP_TMP="/tmp/npm-registry-${GITHUB_RUN_ID:-local}.json"
+          curl -sf "https://registry.npmjs.org/${MCP_NPM_PKG}" -o "$MCP_TMP" || echo '{}' > "$MCP_TMP"
+          NPM_DOWNLOADS=$(curl -sf "https://api.npmjs.org/downloads/point/last-week/${MCP_NPM_PKG}" | jq '.downloads // 0' 2>/dev/null || echo 0)
+          NPM_DOWNLOADS=$(echo "${NPM_DOWNLOADS:-0}" | tr -d '[:space:]')
+          [[ "$NPM_DOWNLOADS" =~ ^[0-9]+$ ]] || NPM_DOWNLOADS=0
+          NPM_VERSION=$(jq -r '.["dist-tags"].latest // "unknown"' "$MCP_TMP" 2>/dev/null || echo "unknown")
           NPM_VERSION=${NPM_VERSION:-unknown}
-          NPM_LAST_PUBLISH=$(echo "$NPM_REGISTRY" | jq -r '(.time[.["dist-tags"].latest] // empty) | split("T")[0]' 2>/dev/null || echo "unknown")
+          NPM_LAST_PUBLISH=$(jq -r '(.time[.["dist-tags"].latest] // empty) | split("T")[0]' "$MCP_TMP" 2>/dev/null || echo "unknown")
           NPM_LAST_PUBLISH=${NPM_LAST_PUBLISH:-unknown}
 
           MCP_VIEWS_JSON=$(gh api "repos/${MCP_REPO}/traffic/views" 2>/dev/null || echo '{}')
           MCP_VISITORS=$(echo "$MCP_VIEWS_JSON" | jq '.uniques // null' 2>/dev/null || echo null)
-          MCP_VISITORS=${MCP_VISITORS:-null}
+          MCP_VISITORS=$(echo "${MCP_VISITORS:-null}" | tr -d '[:space:]')
           MCP_VIEWS=$(echo "$MCP_VIEWS_JSON" | jq '.count // null' 2>/dev/null || echo null)
-          MCP_VIEWS=${MCP_VIEWS:-null}
+          MCP_VIEWS=$(echo "${MCP_VIEWS:-null}" | tr -d '[:space:]')
 
           NEW_MCP_SNAP=$(jq -n \
             --arg date "$DATE" \
-            --argjson downloads "$NPM_DOWNLOADS" \
-            --arg version "$NPM_VERSION" \
-            --arg last_publish "$NPM_LAST_PUBLISH" \
-            --argjson visitors "${MCP_VISITORS:-null}" \
-            --argjson views "${MCP_VIEWS:-null}" \
+            --argjson downloads "${NPM_DOWNLOADS}" \
+            --arg version "${NPM_VERSION}" \
+            --arg last_publish "${NPM_LAST_PUBLISH}" \
+            --argjson visitors "${MCP_VISITORS}" \
+            --argjson views "${MCP_VIEWS}" \
             '{date: $date, npm_weekly_downloads: $downloads, npm_latest_version: $version, npm_last_publish: $last_publish} | if $visitors then .github_unique_visitors_14d = $visitors else . end | if $views then .github_views_14d = $views else . end')
 
           MCP_FILE="metrics/mcp-metrics.json"
