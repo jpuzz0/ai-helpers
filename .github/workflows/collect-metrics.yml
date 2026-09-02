@@ -154,14 +154,18 @@ jobs:
           MCP_NPM_PKG="@patternfly/patternfly-mcp"
 
           NPM_REGISTRY=$(curl -sf "https://registry.npmjs.org/${MCP_NPM_PKG}" || echo '{}')
-          NPM_DOWNLOADS=$(curl -sf "https://api.npmjs.org/downloads/point/last-week/${MCP_NPM_PKG}" | jq '.downloads // 0')
+          NPM_DOWNLOADS=$(curl -sf "https://api.npmjs.org/downloads/point/last-week/${MCP_NPM_PKG}" | jq '.downloads // 0' || echo 0)
           NPM_DOWNLOADS=${NPM_DOWNLOADS:-0}
           NPM_VERSION=$(echo "$NPM_REGISTRY" | jq -r '.["dist-tags"].latest // "unknown"')
+          NPM_VERSION=${NPM_VERSION:-unknown}
           NPM_LAST_PUBLISH=$(echo "$NPM_REGISTRY" | jq -r '(.time[.["dist-tags"].latest] // empty) | split("T")[0]' 2>/dev/null || echo "unknown")
+          NPM_LAST_PUBLISH=${NPM_LAST_PUBLISH:-unknown}
 
           MCP_VIEWS_JSON=$(gh api "repos/${MCP_REPO}/traffic/views" 2>/dev/null || echo '{}')
-          MCP_VISITORS=$(echo "$MCP_VIEWS_JSON" | jq '.uniques // null')
-          MCP_VIEWS=$(echo "$MCP_VIEWS_JSON" | jq '.count // null')
+          MCP_VISITORS=$(echo "$MCP_VIEWS_JSON" | jq '.uniques // null' 2>/dev/null || echo null)
+          MCP_VISITORS=${MCP_VISITORS:-null}
+          MCP_VIEWS=$(echo "$MCP_VIEWS_JSON" | jq '.count // null' 2>/dev/null || echo null)
+          MCP_VIEWS=${MCP_VIEWS:-null}
 
           NEW_MCP_SNAP=$(jq -n \
             --arg date "$DATE" \
