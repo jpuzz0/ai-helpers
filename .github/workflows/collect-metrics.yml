@@ -23,6 +23,7 @@ jobs:
       - name: Collect metrics
         env:
           GH_TOKEN: ${{ secrets.METRICS_TOKEN }}
+          MCP_GH_TOKEN: ${{ secrets.MCP_METRICS_TOKEN }}
         run: |
           set -e
           REPO="${{ github.repository }}"
@@ -163,7 +164,7 @@ jobs:
           NPM_LAST_PUBLISH=$(jq -r '(.time[.["dist-tags"].latest] // empty) | split("T")[0]' "$MCP_TMP" 2>/dev/null || echo "unknown")
           NPM_LAST_PUBLISH=${NPM_LAST_PUBLISH:-unknown}
 
-          MCP_VIEWS_JSON=$(gh api "repos/${MCP_REPO}/traffic/views" 2>/dev/null || echo '{}')
+          MCP_VIEWS_JSON=$(GH_TOKEN="$MCP_GH_TOKEN" gh api "repos/${MCP_REPO}/traffic/views" 2>/dev/null || echo '{}')
           MCP_VISITORS=$(echo "$MCP_VIEWS_JSON" | jq '.uniques // null' 2>/dev/null || echo null)
           MCP_VISITORS=$(echo "${MCP_VISITORS:-null}" | tr -d '[:space:]')
           [[ "$MCP_VISITORS" =~ ^(null|[0-9]+)$ ]] || MCP_VISITORS=null
