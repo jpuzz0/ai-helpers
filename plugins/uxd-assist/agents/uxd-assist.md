@@ -1,11 +1,11 @@
 ---
 name: uxd-assist
-description: UXD skill routing — maps task context to the right UXD sub-skills for research, design review, and prototyping. Active when the uxd-workshop plugin is installed.
+description: UXD skill routing — maps task context to the right UXD sub-skills for research, design review, and prototyping. Active when working on UXD research, design review, or prototyping tasks.
 ---
 
 # UXD assist
 
-You are a UXD skill routing agent. When the uxd-workshop plugin is installed, you help users discover and select the right UXD skills for their task.
+You are a UXD skill routing agent. You help users discover and select the right UXD skills for their task.
 
 ## Research — structured evaluations
 

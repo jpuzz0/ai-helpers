@@ -10,6 +10,7 @@ execution:
 runner:
   type: claude-code
   plugin_dirs:
+    - ./plugins/pf-assist
     - ./plugins/patternfly/pf-code-review
 
 models:
@@ -72,7 +73,8 @@ judges:
       text = outputs.get("conversation", "").lower()
       pf_subskills = [
           "pf-figma-check", "pf-color-scan", "pf-import-check",
-          "pf-component-check", "pf-test-gen", "pf-figma-token-check",
+          "pf-component-check", "pf-component-reuse-check", "pf-test-gen",
+          "pf-figma-token-check", "pf-css-token-check",
           "pf-css-migration-scan", "pf-security-scan", "pf-project-gen",
           "pf-icon-finder", "pf-ai-audit", "pf-review"
       ]

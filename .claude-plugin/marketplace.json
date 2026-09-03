@@ -10,6 +10,16 @@
       "description": "Everything you need for PatternFly development — React components, design guidance, migration, and MCP docs"
     },
     {
+      "name": "pf-assist",
+      "source": "./plugins/pf-assist",
+      "description": "PatternFly skill routing — maps project signals to the right PF sub-skills"
+    },
+    {
+      "name": "uxd-assist",
+      "source": "./plugins/uxd-assist",
+      "description": "UXD skill routing — discover the right skills for research, design review, and prototyping workflows"
+    },
+    {
       "name": "uxd-workshop",
       "source": "./plugins/uxd-workshop",
       "description": "UXD team tools — prototyping, research, design review"
