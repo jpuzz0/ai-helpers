@@ -120,7 +120,7 @@ judges:
           text += "\n" + content
       false_positive_patterns = [
           re.compile(r'(hardcoded|concatenat\w+|rtl.unsafe|physical\s+propert)\w*.*\b(found|detected|issue|violation|flag)', re.IGNORECASE),
-          re.compile(r'(found|detected|identified)\s+\d+\s+(issue|violation|problem)', re.IGNORECASE),
+          re.compile(r'(found|detected|identified)\s+([1-9]\d*)\s+(issue|violation|problem)', re.IGNORECASE),
       ]
       for p in false_positive_patterns:
           if p.search(text):
