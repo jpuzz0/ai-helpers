@@ -10,7 +10,7 @@ prompt: |
   import { useQuery } from '@tanstack/react-query';
 
   const ProjectList = ({ hasAccess }: { hasAccess: boolean }) => {
-    const { data, isLoading, error } = useQuery({ queryKey: ['projects'], queryFn: fetchProjects });
+    const { data, isLoading, error, refetch } = useQuery({ queryKey: ['projects'], queryFn: fetchProjects });
 
     if (!hasAccess) {
       return (
