@@ -1,5 +1,6 @@
 expect_issues: false
 issue_categories: []
+expected_findings: []
 notes: |
   Negative control — this component is well-defended:
   - Default values for items (=[]) and isLoading (=false)

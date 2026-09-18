@@ -1,6 +1,19 @@
 expect_issues: true
 issue_categories:
   - conditional_render
+expected_findings:
+  - id: error-count
+    file: StatusPanel.tsx
+    line: 27
+    signals: ['errorCount', '&&', '0']
+  - id: warning-count
+    file: StatusPanel.tsx
+    line: 31
+    signals: ['warningCount', '&&', '0']
+  - id: empty-items
+    file: StatusPanel.tsx
+    line: 35
+    signals: ['items.length', '&&', '0']
 notes: |
   Conditional rendering traps with && operator:
   - errorCount && <Alert> renders 0 (the number) when errorCount is 0

@@ -24,7 +24,7 @@ dataset:
   schema: |
     Each case directory contains:
     - input.yaml: prompt field with a realistic review request
-    - annotations.yaml: expect_issues (true/false), issue_categories list
+    - annotations.yaml: expect_issues (true/false), issue_categories list, and expected_findings with fixture-specific evidence and locations
     - A .tsx fixture file the prompt references
 
 outputs:
@@ -45,52 +45,75 @@ judges:
     if: "'missing_defensive' in annotations.get('issue_categories', [])"
     check: |
       import re
+      ann = outputs.get("annotations", {})
       text = outputs.get("conversation", "")
       for path, content in outputs.get("files", {}).items():
           text += "\n" + content
-      patterns = [
-          re.compile(r'(optional\s+chain|undefined|null\s+check|default\s+value|type\s+guard|defensive)', re.IGNORECASE),
-          re.compile(r'(\?\.|\.map\(\)|\.length)\b.*\b(crash|undefined|error|fail)', re.IGNORECASE),
-          re.compile(r'(missing|lacks?|no|without)\b.*\b(guard|check|validation|default)', re.IGNORECASE),
-      ]
-      if any(p.search(text) for p in patterns):
-          return True, "Correctly identified missing defensive code patterns"
-      return False, "Did not flag missing defensive code (optional chaining, defaults, type guards)"
+      findings = ann.get("expected_findings", [])
+      if not findings:
+          return False, "Test case missing expected_findings annotations"
+      missing = []
+      for finding in findings:
+          location = re.compile(
+              re.escape(finding["file"]) + r".{0,80}(?:line\s*)?" + str(finding["line"]),
+              re.IGNORECASE | re.DOTALL,
+          )
+          evidence = all(re.search(signal, text, re.IGNORECASE) for signal in finding["signals"])
+          if not location.search(text) or not evidence:
+              missing.append(finding["id"])
+      if missing:
+          return False, f"Missing fixture-specific findings or locations: {', '.join(missing)}"
+      return True, f"Identified all {len(findings)} expected defensive-code findings with locations"
 
   - name: flags_pf_contract_violation
     description: Identifies PF-specific component misuse that fails silently
     if: "'pf_contract' in annotations.get('issue_categories', [])"
     check: |
       import re
+      ann = outputs.get("annotations", {})
       text = outputs.get("conversation", "")
       for path, content in outputs.get("files", {}).items():
           text += "\n" + content
-      pf_issues = [
-          re.compile(r'(dataLabel|responsive)\b.*\b(missing|without|vanish|mobile)', re.IGNORECASE),
-          re.compile(r'(onSelect|handler)\b.*\b(missing|without|undefined|silent)', re.IGNORECASE),
-          re.compile(r'(empty\s*state|EmptyState)\b.*\b(missing|guard|when|zero|empty)', re.IGNORECASE),
-          re.compile(r'(eventKey|duplicate)\b.*\b(collision|duplicate|wrong|break)', re.IGNORECASE),
-      ]
-      if any(p.search(text) for p in pf_issues):
-          return True, "Correctly identified PF component contract violation"
-      return False, "Did not flag PF-specific component misuse"
+      findings = ann.get("expected_findings", [])
+      if not findings:
+          return False, "Test case missing expected_findings annotations"
+      missing = []
+      for finding in findings:
+          location = re.compile(
+              re.escape(finding["file"]) + r".{0,80}(?:line\s*)?" + str(finding["line"]),
+              re.IGNORECASE | re.DOTALL,
+          )
+          evidence = all(re.search(signal, text, re.IGNORECASE) for signal in finding["signals"])
+          if not location.search(text) or not evidence:
+              missing.append(finding["id"])
+      if missing:
+          return False, f"Missing fixture-specific findings or locations: {', '.join(missing)}"
+      return True, f"Identified all {len(findings)} expected PatternFly contract findings with locations"
 
   - name: flags_conditional_render_issue
     description: Identifies unsafe conditional rendering with && operator
     if: "'conditional_render' in annotations.get('issue_categories', [])"
     check: |
       import re
+      ann = outputs.get("annotations", {})
       text = outputs.get("conversation", "")
       for path, content in outputs.get("files", {}).items():
           text += "\n" + content
-      patterns = [
-          re.compile(r'(&&|short.circuit).*\b(0|zero|empty|falsy|render)', re.IGNORECASE),
-          re.compile(r'(conditional\w*\s+render)\w*.*\b(0|zero|falsy|truthy)', re.IGNORECASE),
-          re.compile(r'render\w*\s+(0|zero|the\s+number)\b', re.IGNORECASE),
-      ]
-      if any(p.search(text) for p in patterns):
-          return True, "Correctly identified unsafe conditional rendering with && operator"
-      return False, "Did not flag conditional rendering trap (0 or '' with &&)"
+      findings = ann.get("expected_findings", [])
+      if not findings:
+          return False, "Test case missing expected_findings annotations"
+      missing = []
+      for finding in findings:
+          location = re.compile(
+              re.escape(finding["file"]) + r".{0,80}(?:line\s*)?" + str(finding["line"]),
+              re.IGNORECASE | re.DOTALL,
+          )
+          evidence = all(re.search(signal, text, re.IGNORECASE) for signal in finding["signals"])
+          if not location.search(text) or not evidence:
+              missing.append(finding["id"])
+      if missing:
+          return False, f"Missing fixture-specific findings or locations: {', '.join(missing)}"
+      return True, f"Identified all {len(findings)} expected conditional-render findings with locations"
 
   - name: has_severity_grouping
     description: Output groups findings by severity level
@@ -134,12 +157,14 @@ judges:
       text = outputs.get("conversation", "")
       for path, content in outputs.get("files", {}).items():
           text += "\n" + content
-      false_positive_patterns = [
-          re.compile(r'(critical|crash|data\s+loss)\b[^.]{0,120}\b(found|detected|identified)', re.IGNORECASE),
-          re.compile(r'(found|detected|identified)\s+\d+\s+(critical|high)\s+(issue|finding|problem)', re.IGNORECASE),
-      ]
-      for p in false_positive_patterns:
-          if p.search(text):
+      affirmative = re.compile(
+          r'\b(?:found|detected|identified|flagged|reported)\b.{0,80}\b(?:critical|high)\b.{0,30}\b(?:issue|finding|problem)s?\b'
+          r'|\b(?:critical|high)\b.{0,30}\b(?:issue|finding|problem)s?\b.{0,80}\b(?:found|detected|identified|flagged|reported)\b',
+          re.IGNORECASE,
+      )
+      negation = re.compile(r'\b(?:no|none|without|zero)\b', re.IGNORECASE)
+      for sentence in re.split(r'(?<=[.!?])\s+|\n+', text):
+          if not negation.search(sentence) and affirmative.search(sentence):
               return False, "False positive — flagged well-defended code as having critical/high issues"
       return True, "Correctly recognized well-defended component without false critical/high findings"
 

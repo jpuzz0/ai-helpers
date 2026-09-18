@@ -1,6 +1,23 @@
 expect_issues: true
 issue_categories:
   - pf_contract
+expected_findings:
+  - id: missing-data-label
+    file: OrderTable.tsx
+    line: 73
+    signals: ['Td', 'dataLabel', 'responsive']
+  - id: missing-select-handler
+    file: OrderTable.tsx
+    line: 45
+    signals: ['Select', 'onSelect', 'selection']
+  - id: duplicate-tab-key
+    file: OrderTable.tsx
+    line: 88
+    signals: ['eventKey', 'duplicate', 'tab']
+  - id: missing-empty-state
+    file: OrderTable.tsx
+    line: 82
+    signals: ['Pagination', 'empty', 'guard']
 notes: |
   PF contract violations:
   - Td missing dataLabel prop — content vanishes in responsive/mobile mode
