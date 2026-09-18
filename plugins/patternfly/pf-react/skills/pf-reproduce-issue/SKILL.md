@@ -37,10 +37,11 @@ If the issue includes a CodeSandbox, StackBlitz, or repository link, note it but
 Choose the simplest approach that matches the issue context:
 
 **If the user has an existing PF project open:**
-- Use the current project. Check that PF versions match the issue.
+- Treat the existing project as read-only. Create the reproduction in an isolated temporary workspace, such as `repro/` or a system temp directory, and copy only the required files or create a minimal project there.
+- Check that PF versions match the issue without modifying the source project.
 
 **If no project is available:**
-- Create a minimal reproduction using the project structure from `pf-project-gen`.
+- Create a minimal reproduction in an isolated temporary workspace.
 - Install only the PF packages referenced in the issue.
 
 Ensure CSS imports are correct — many PF issues stem from missing or misordered CSS. For import rules, defer to the `pf-coding-standards` agent.
