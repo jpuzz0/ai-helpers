@@ -49,7 +49,7 @@ Check for misuse of PatternFly component APIs that fails silently. For structura
 - **Table**: `Td` without `dataLabel` in responsive mode — content vanishes on mobile
 - **Select/Dropdown**: Missing `onSelect` handler — selections don't register
 - **Tabs**: Duplicate `eventKey` values — wrong tab renders
-- **Pagination**: `count` of `0` with no empty state guard — shows "0 of 0"
+- **Pagination**: `itemCount` of `0` with no empty state guard — shows "0 of 0"
 - **Wizard**: Step `name` collisions — navigation breaks silently
 - **DualListSelector**: Empty `availableOptions` without empty state — blank panel
 
