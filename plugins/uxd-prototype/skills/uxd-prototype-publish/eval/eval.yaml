@@ -9,6 +9,8 @@ execution:
 
 runner:
   type: claude-code
+  plugin_dirs:
+    - plugins/uxd-prototype
 
 models:
   skill: claude-sonnet-5
