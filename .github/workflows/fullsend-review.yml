@@ -28,8 +28,7 @@ jobs:
 
       - name: Install openshell
         run: |
-          curl -fsSL https://openshell.dev/install.sh | bash
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          apt-get update && apt-get install -y openshell
 
       - name: Set up Fullsend
         run: |
