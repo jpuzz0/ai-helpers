@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir -p ~/fullsend-bin
           cd ~/fullsend-bin
-          curl -fsSL https://github.com/fullsend-ai/fullsend/releases/download/v0.43.0/fullsend_0.43.0_linux_amd64.tar.gz | tar xz
+          curl -fsSL -L https://github.com/fullsend-ai/fullsend/releases/download/v0.43.0/fullsend_0.43.0_linux_amd64.tar.gz | tar xz
           echo "$PWD" >> $GITHUB_PATH
 
       - name: Run Fullsend review
