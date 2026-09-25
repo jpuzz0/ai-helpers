@@ -29,7 +29,8 @@ jobs:
 
       - name: Install Fullsend
         run: |
-          curl -fsSL https://fullsend.sh/install.sh | sh
+          curl -fsSL https://fullsend.sh/install.sh | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Run Fullsend review
         env:
