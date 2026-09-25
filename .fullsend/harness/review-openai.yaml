@@ -4,3 +4,6 @@ providers:
   - openai
 
 policy: policies/base.yaml
+
+env:
+  - github/review.env
