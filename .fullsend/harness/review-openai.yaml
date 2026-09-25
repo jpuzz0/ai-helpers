@@ -2,3 +2,5 @@ base: https://raw.githubusercontent.com/fullsend-ai/agents/main/harness/review.y
 
 providers:
   - openai
+
+policy: policies/base.yaml

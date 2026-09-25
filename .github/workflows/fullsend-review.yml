@@ -25,12 +25,13 @@ jobs:
           PR_NUMBER: ${{ github.event.inputs.pr_number }}
         run: |
           gh pr checkout $PR_NUMBER
-          echo "pr_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Install Fullsend
+      - name: Set up Fullsend
         run: |
-          curl -fsSL https://fullsend.sh/install.sh | bash
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          mkdir -p ~/fullsend-bin
+          cd ~/fullsend-bin
+          curl -fsSL https://github.com/fullsend-ai/fullsend/releases/download/v0.43.0/fullsend-x86_64-unknown-linux-gnu.tar.xz | tar xJ
+          echo "$PWD" >> $GITHUB_PATH
 
       - name: Run Fullsend review
         env:
