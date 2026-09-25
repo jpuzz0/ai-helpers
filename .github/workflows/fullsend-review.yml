@@ -37,6 +37,9 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Stub GCP credentials to satisfy Fullsend validation.
+          # Codex runtime uses OpenAI only; this variable is not read.
+          GOOGLE_APPLICATION_CREDENTIALS: /dev/null
         run: |
           fullsend run review \
             --fullsend-dir .fullsend \
