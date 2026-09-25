@@ -26,13 +26,6 @@ jobs:
         run: |
           gh pr checkout $PR_NUMBER
 
-      - name: Set up Fullsend
-        run: |
-          mkdir -p ~/fullsend-bin
-          cd ~/fullsend-bin
-          curl -fsSL -L https://github.com/fullsend-ai/fullsend/releases/download/v0.43.0/fullsend_0.43.0_linux_amd64.tar.gz | tar xz
-          echo "$PWD" >> $GITHUB_PATH
-
       - name: Run Fullsend review
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -43,13 +36,23 @@ jobs:
           GITHUB_PR_URL: https://github.com/${{ github.repository }}/pull/${{ github.event.inputs.pr_number }}
           PRIOR_REVIEW_SHA: ""
           PRIOR_REVIEW_PROVENANCE: ""
-          # Stub GCP credentials to satisfy Fullsend validation.
-          # Codex runtime uses OpenAI only; this variable is not read.
           GOOGLE_APPLICATION_CREDENTIALS: /dev/null
         run: |
-          fullsend run review \
-            --fullsend-dir .fullsend \
-            --target-repo . \
-            --forge github \
-            --runtime codex \
-            --model openai/gpt-5.6-luna
+          docker run --rm \
+            -v $(pwd):/workspace \
+            -e OPENAI_API_KEY \
+            -e GH_TOKEN \
+            -e REVIEW_TOKEN \
+            -e REPO_FULL_NAME \
+            -e PR_NUMBER \
+            -e GITHUB_PR_URL \
+            -e PRIOR_REVIEW_SHA \
+            -e PRIOR_REVIEW_PROVENANCE \
+            -e GOOGLE_APPLICATION_CREDENTIALS \
+            ghcr.io/fullsend-ai/fullsend-code \
+            fullsend run review \
+              --fullsend-dir /workspace/.fullsend \
+              --target-repo /workspace \
+              --forge github \
+              --runtime codex \
+              --model openai/gpt-5.6-luna
