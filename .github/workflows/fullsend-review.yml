@@ -40,6 +40,7 @@ jobs:
           REVIEW_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_FULL_NAME: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.inputs.pr_number }}
+          GITHUB_PR_URL: https://github.com/${{ github.repository }}/pull/${{ github.event.inputs.pr_number }}
           # Stub GCP credentials to satisfy Fullsend validation.
           # Codex runtime uses OpenAI only; this variable is not read.
           GOOGLE_APPLICATION_CREDENTIALS: /dev/null
