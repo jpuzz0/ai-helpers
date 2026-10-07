@@ -1,5 +1,6 @@
 {
   "name": "pf-code-review",
+  "version": "1.0.0",
   "description": "Code review and quality — adversarial review, security patterns",
   "dependencies": [
     "pf-mcp"
