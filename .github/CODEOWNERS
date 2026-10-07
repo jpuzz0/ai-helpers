@@ -13,7 +13,6 @@
 # Sub-plugins inherit plugins/patternfly/. pf-a11y is the only separate route.
 plugins/patternfly/                 @rh-uxd/ai-pf-reviewers
 plugins/patternfly/pf-a11y/         @rh-uxd/ai-pf-a11y-reviewers
-plugins/pf-assist/                  @rh-uxd/ai-pf-reviewers
 
 # --- UXD plugins ---
 plugins/uxd-*/                      @rh-uxd/ai-uxd-reviewers

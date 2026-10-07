@@ -11,7 +11,7 @@
     },
     {
       "name": "pf-assist",
-      "source": "./plugins/pf-assist",
+      "source": "./plugins/patternfly/pf-assist",
       "description": "PatternFly skill routing — maps project signals to the right PF sub-skills"
     },
     {
