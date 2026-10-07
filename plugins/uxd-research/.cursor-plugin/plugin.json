@@ -1,5 +1,6 @@
 {
   "name": "uxd-research",
+  "version": "1.0.0",
   "description": "UX research pipeline — heuristic evaluation, usability testing, research methodology",
   "author": { "name": "UXD Team" },
   "repository": "https://github.com/rh-uxd/ai-helpers",
