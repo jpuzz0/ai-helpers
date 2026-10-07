@@ -1,5 +1,6 @@
 {
   "name": "patternfly",
+  "version": "1.0.0",
   "description": "Everything you need for PatternFly development — React components, design guidance, migration, and MCP docs",
   "dependencies": [
     "pf-assist",
