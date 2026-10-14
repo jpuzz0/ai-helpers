@@ -9,6 +9,12 @@ version.
 
 > **WCAG reference: 2.2** (W3C Recommendation, October 2023).
 
+> **General principle:** Prefer native HTML elements (`<button>`,
+> `<input>`, `<select>`) over ARIA attributes. Native elements provide
+> accessible semantics, keyboard behavior, and state management for
+> free. ARIA should only be used when native elements cannot achieve
+> the required pattern.
+
 ## Code signals — scan for these in the diff
 
 - Interactive elements: `<button>`, `<a>`, `<input>`, `<select>`,

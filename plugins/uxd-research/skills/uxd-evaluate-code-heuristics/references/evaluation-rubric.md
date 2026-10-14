@@ -1,10 +1,6 @@
 # Evaluation Rubric
 
-Criteria for each evaluation dimension. State Coverage and Content &
-Microcopy are adapted from
-[uxd-evaluate-design-heuristics](../../uxd-evaluate-design-heuristics/references/evaluation-rubric.md).
-Destructive Action Safety follows established confirmation-dialog
-usability patterns.
+Criteria for each evaluation dimension.
 
 Each check is classified as **ERROR** (violates a standard — must fix)
 or **WARN** (best-practice gap — should fix).
