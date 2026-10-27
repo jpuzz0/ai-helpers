@@ -20,6 +20,8 @@ The user provides one of:
 
 ## Context Detection
 
+First, check the request scope. If the user explicitly requests a non-PatternFly framework (Material UI, Chakra, Ant Design, or plain HTML), decline generation and explain that this skill generates PatternFly context only. You may offer an equivalent PatternFly component as an alternative, but do not substitute PatternFly automatically.
+
 Determine the context scope:
 - **Single component**: One PF component with its props, variants, and common patterns
 - **Component group**: Related components that are typically composed together (e.g., Table + Toolbar + Pagination)

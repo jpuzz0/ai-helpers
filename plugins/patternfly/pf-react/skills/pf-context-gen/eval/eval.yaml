@@ -9,6 +9,8 @@ execution:
 
 runner:
   type: claude-code
+  plugin_dirs:
+    - plugins/patternfly/pf-react
 
 models:
   skill: claude-sonnet-4-6
@@ -137,18 +139,37 @@ judges:
       text = outputs.get("conversation", "")
       for path, content in outputs.get("files", {}).items():
           text += "\n" + content
-      decline_patterns = [
-          r'patternfly.specific',
-          r'not\s+(a\s+)?patternfly',
-          r'doesn.t\s+(apply|work|support)',
-          r'outside.*scope',
-          r'material.ui|chakra|ant.design',
-          r'this\s+skill\s+(is|focuses|only)',
+      refusal_patterns = [
+          r'\b(?:cannot|can\'t|won\'t|will not|do not|don\'t)\b.{0,80}\b(?:generate|provide|create|support|handle)\b',
+          r'\b(?:outside|out of)\b.{0,40}\b(?:scope|focus)\b',
+          r'\b(?:only|specifically)\b.{0,40}\b(?:patternfly|pf)\b.{0,40}\b(?:context|component|request)',
       ]
-      matches = sum(1 for p in decline_patterns if re.search(p, text, re.IGNORECASE))
-      if matches >= 1:
-          return (True, "Non-PF request was declined or redirected")
-      return (False, "Non-PF request was not declined — skill should redirect to appropriate framework")
+      redirect_patterns = [
+          r'\b(?:use|try|refer to|consult|look at)\b.{0,80}\b(?:documentation|docs|another skill|appropriate framework)\b',
+          r'\b(?:patternfly|pf)\b.{0,80}\b(?:alternative|equivalent|instead)\b',
+      ]
+      refused = any(re.search(pattern, text, re.IGNORECASE) for pattern in refusal_patterns)
+      redirected = any(re.search(pattern, text, re.IGNORECASE) for pattern in redirect_patterns)
+      if refused or redirected:
+          return (True, "Non-PF request was explicitly declined or redirected")
+      return (False, "Non-PF request was not explicitly declined or redirected")
+
+  - name: no_non_pf_implementation
+    description: Non-PatternFly requests do not receive framework-specific implementation context
+    if: "annotations.get('scope') == 'non-pf'"
+    check: |
+      import re
+      text = outputs.get("conversation", "")
+      for path, content in outputs.get("files", {}).items():
+          text += "\n" + content
+      implementation_patterns = [
+          r'from\s+["\']@mui/',
+          r'<DataGrid\b',
+          r'\b(?:rows|columns|paginationModel|sortModel|filterModel)\s*=',
+      ]
+      if any(re.search(pattern, text, re.IGNORECASE) for pattern in implementation_patterns):
+          return (False, "Non-PF request received Material UI DataGrid implementation details")
+      return (True, "No Material UI DataGrid implementation details found")
 
 thresholds:
   has_quick_start:
@@ -162,4 +183,6 @@ thresholds:
   curates_props:
     min_pass_rate: 1.0
   declines_non_pf:
+    min_pass_rate: 1.0
+  no_non_pf_implementation:
     min_pass_rate: 1.0
