@@ -85,7 +85,7 @@ Include a comment block at the top of the test file mapping test descriptions to
 
 ## Spec-driven rules
 
-Follow the existing `pf-test-gen` conventions for Testing Library queries, `userEvent`, mocking, async assertions, and PatternFly library components. The rules below are specific to spec-first generation:
+Before writing tests, read `pf-test-gen` and apply its conventions for Testing Library queries, `userEvent`, mocking, async assertions, and PatternFly library components. The rules below are specific to spec-first generation and take precedence where they differ:
 
 - **One behavior per test** — each test should verify one requirement or sub-requirement
 - When the spec is ambiguous about a behavior, generate the test with a `// SPEC-UNCLEAR:` comment noting what needs clarification rather than guessing
