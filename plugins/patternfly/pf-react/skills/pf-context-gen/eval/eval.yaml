@@ -81,12 +81,9 @@ judges:
       text = outputs.get("conversation", "")
       for path, content in outputs.get("files", {}).items():
           text += "\n" + content
-      has_table = bool(re.search(r'\|\s*Prop\s*\|.*\|\s*Type\s*\|', text, re.IGNORECASE))
+      has_table = bool(re.search(r'\|\s*Prop\s*\|\s*Type\s*\|', text, re.IGNORECASE))
       if has_table:
           return (True, "Props table with Prop and Type columns found")
-      has_alt_table = bool(re.search(r'\|\s*\w+\s*\|.*\|.*\|.*\|', text))
-      if has_alt_table:
-          return (True, "Structured props table found (alternate format)")
       return (False, "No structured props table found — skill specifies Prop|Type|Default|Purpose format")
 
   - name: has_composition_for_group
